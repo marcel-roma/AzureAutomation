@@ -1,8 +1,8 @@
-Write-Host "Script execution begins here...";
+Write-Output "Script execution begins here...";
 
 $Conn = Get-AutomationConnection -Name AzureRunAsConnection;
 
-Add-AzureRMAccount `
+$null = Add-AzureRMAccount `
                 -ServicePrincipal `
                 -Tenant $Conn.TenantID `
                 -ApplicationId $Conn.ApplicationID `
@@ -10,5 +10,5 @@ Add-AzureRMAccount `
 
 $resourceGroups = Get-AzureRmResourceGroup;
 
-Write-Host "Output:";
-Write-Host $resourceGroups;
+Write-Output "Output:";
+Write-Output $resourceGroups;
