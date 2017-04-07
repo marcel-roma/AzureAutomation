@@ -5,6 +5,11 @@ $cred = Get-AzureRmAutomationCredential `
 		-Name "drogeriemarktentwAsAdmin"> `
 		-ResourceGroupName "mms-weu";
 
+if($cred -eq $null)
+{
+    Write-Output "GetAzureRmAutomationCredential returned no credential.";
+}        
+
 # Notwendige Module importieren
 Write-Output "Importing necessary modules...";
 Import-Module MsOnline;
