@@ -24,9 +24,17 @@ function GetODUsage($url)
     return "$($sc.Owner), $($usage), $($url)"
 }
 
-Write-Output "Entering OneDrive-Loop...";
+Write-Output "Getting users...";
+$allUsers = Get-MsolUser -All;
 
-foreach($usr in $(Get-MsolUser -All ))
+if($allUsers -eq $null)
+{
+    Write-Output "Get-MsolUser returned no user.";
+}
+
+Write-Output $allUsers;
+
+foreach($usr in $allUsers)
 {
     Write-Output "Processing user $usr ...";
 
