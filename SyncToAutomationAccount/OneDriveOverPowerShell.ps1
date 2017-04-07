@@ -1,13 +1,11 @@
 Write-Output "Script is starting...";
 
-$cred = Get-AzureRmAutomationCredential `
-		-AutomationAccountName "dm-RomaM-OMS-AutomA-01" `
-		-Name "drogeriemarktentwAsAdmin"> `
-		-ResourceGroupName "mms-weu";
+$cred = Get-AutomationPSCredential `
+		-Name "drogeriemarktentwAsAdmin">;
 
 if($cred -eq $null)
 {
-    Write-Output "GetAzureRmAutomationCredential returned no credential.";
+    Write-Output "Get-AutomationPSCredential returned no credential.";
 }        
 
 # Notwendige Module importieren
