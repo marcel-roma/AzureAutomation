@@ -23,7 +23,7 @@ function GetODUsage($url)
 {
     $sc = Get-PnPTenantSite $url -Detailed -ErrorAction SilentlyContinue | select url, storageusagecurrent, Owner
     $usage = $sc.StorageUsageCurrent / 1024
-    return "$($sc.Owner), $($usage), $($url)"
+    return "Owner: $($sc.Owner), Usage: $($usage), Url: $($url)"
 }
 
 Write-Output "Getting users...";
@@ -32,6 +32,7 @@ $allUsers = Get-MsolUser -All;
 if($allUsers -eq $null)
 {
     Write-Output "Get-MsolUser returned no user.";
+    return;
 }
 
 Write-Output $allUsers;
