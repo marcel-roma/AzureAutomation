@@ -1,7 +1,6 @@
 Write-Output "Script is starting...";
 
-$cred = Get-AutomationPSCredential `
-		-Name "drogeriemarktentwAsAdmin">;
+$cred = Get-AutomationPSCredential -Name "drogeriemarktentwAsAdmin";
 
 if($cred -eq $null)
 {
