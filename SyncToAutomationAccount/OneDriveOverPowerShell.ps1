@@ -23,8 +23,10 @@ Connect-MsolService -Credential $cred
 function GetODUsage($url)
 {
     $sc = Get-PnPTenantSite $url -Detailed -ErrorAction SilentlyContinue | select url, storageusagecurrent, Owner
-    $usage = $sc.StorageUsageCurrent / 1024
+    $usage = $sc.StorageUsageCurrent;
     $owner = $sc.Owner;
+    
+    Write-Output $sc;
 
     if([String]::IsNullOrEmpty($owner)) { $owner = "<not set>" };
 
