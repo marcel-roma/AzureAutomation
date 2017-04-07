@@ -1,6 +1,7 @@
 Write-Output "Script is starting...";
 
 $cred = Get-AutomationPSCredential -Name "drogeriemarktentwAsAdmin";
+$crlf = "`n";
 
 if($cred -eq $null)
 {
@@ -25,9 +26,9 @@ function GetODUsage($url)
     $usage = $sc.StorageUsageCurrent / 1024
     $owner = $sc.Owner;
 
-    if($owner -eq $null) $owner = "<not set>";
+    if([String]::IsNullOrEmpty($owner)) { $owner = "<not set>" };
 
-    return "Owner: $($owner), Usage: $($usage), Url: $($url)"
+    return "Owner: $($owner),`nUsage: $($usage),`nUrl: $($url)"
 }
 
 Write-Output "Getting users...";
@@ -41,7 +42,7 @@ if($allUsers -eq $null)
 
 # Write-Output $allUsers;
 
-$crlf = "`n";
+
 
 foreach($usr in $allUsers)
 {
@@ -49,7 +50,7 @@ foreach($usr in $allUsers)
     {
         $upn = $usr.UserPrincipalName.Replace(".","_");
         $od4bSC = "https://dmdrogerieentw-my.sharepoint.com/personal/$($upn.Replace("@","_"))";
-        Write-Output $od4bSC;
+        # Write-Output $od4bSC;
 
         foreach($lic in $usr.licenses)
         {
