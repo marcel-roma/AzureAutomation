@@ -23,7 +23,11 @@ function GetODUsage($url)
 {
     $sc = Get-PnPTenantSite $url -Detailed -ErrorAction SilentlyContinue | select url, storageusagecurrent, Owner
     $usage = $sc.StorageUsageCurrent / 1024
-    return "Owner: $($sc.Owner), Usage: $($usage), Url: $($url)"
+    $owner = $sc.Owner;
+
+    if($owner -eq $null) $owner = "<not set>";
+
+    return "Owner: $($owner), Usage: $($usage), Url: $($url)"
 }
 
 Write-Output "Getting users...";
@@ -35,9 +39,9 @@ if($allUsers -eq $null)
     return;
 }
 
-Write-Output $allUsers;
+# Write-Output $allUsers;
 
-$crlf = "`r`n";
+$crlf = "`n";
 
 foreach($usr in $allUsers)
 {
