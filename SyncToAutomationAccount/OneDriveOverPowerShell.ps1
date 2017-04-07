@@ -36,10 +36,10 @@ if($allUsers -eq $null)
 
 Write-Output $allUsers;
 
+$crlf = "`r`n";
+
 foreach($usr in $allUsers)
 {
-    Write-Output "Processing user $usr ...";
-
     if ($usr.IsLicensed -eq $true)
     {
         $upn = $usr.UserPrincipalName.Replace(".","_");
@@ -49,18 +49,19 @@ foreach($usr in $allUsers)
         foreach($lic in $usr.licenses)
         {
             $usage = GetODUsage($od4bSC);
+            $formattedUsage =  $crlf + $usage + " ";
 
             if ($lic.AccountSkuID -eq "dmdrogerieentw:ENTERPRISEPACK") 
             {
-                Write-Output "$usage, E3";
+                Write-Output "$formattedUsage, E3";
             }
             elseif ($lic.AccountSkuID -eq "dmdrogerieentw:WACONEDRIVESTANDARD") 
             {
-                Write-Output "$usage, OneDrive" ;
+                Write-Output "$formattedUsage, OneDrive" ;
             }
             elseif ($lic.AccountSkuId -eq "dmdrogerieentw:ENTERPRISEWITHSCAL")
             {
-                Write-Output "$usage, E4" ;
+                Write-Output "$formattedUsage, E4" ;
             }    
         }
     }
