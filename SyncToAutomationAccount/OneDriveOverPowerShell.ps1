@@ -1,16 +1,19 @@
-Clear-Host;
+Write-Output "Script is starting...";
 
 $cred = Get-AzureRmAutomationCredential `
 		-AutomationAccountName "dm-RomaM-OMS-AutomA-01" `
 		-Name "drogeriemarktentwAsAdmin"> `
-		-ResourceGroupName "mms-weu"
+		-ResourceGroupName "mms-weu";
 
 # Notwendige Module importieren
+Write-Output "Importing necessary modules...";
 Import-Module MsOnline;
 Import-Module Microsoft.Online.SharePoint.PowerShell -DisableNameChecking;
 
-# Verbindung herstellen 
+# Verbindung herstellen
+Write-Output "Connecting to SPO..."; 
 Connect-PnPOnline -Url https://dmdrogerieentw-admin.sharepoint.com -credential $cred
+Write-Output "Connecting to O365...";
 Connect-MsolService -Credential $cred
 
 
@@ -21,27 +24,32 @@ function GetODUsage($url)
     return "$($sc.Owner), $($usage), $($url)"
 }
 
+Write-Output "Entering OneDrive-Loop...";
+
 foreach($usr in $(Get-MsolUser -All ))
 {
     if ($usr.IsLicensed -eq $true)
     {
-        $upn = $usr.UserPrincipalName.Replace(".","_")
-        $od4bSC = "https://dmdrogerieentw-my.sharepoint.com/personal/$($upn.Replace("@","_"))"
-        $od4bSC
+        $upn = $usr.UserPrincipalName.Replace(".","_");
+        $od4bSC = "https://dmdrogerieentw-my.sharepoint.com/personal/$($upn.Replace("@","_"))";
+        Write-Output $od4bSC;
+
         foreach($lic in $usr.licenses)
         {
             if ($lic.AccountSkuID -eq "dmdrogerieentw:ENTERPRISEPACK") 
             {
-                Write-Host "$(GetODUsage($od4bSC)), E3"
+                Write-Output "$(GetODUsage($od4bSC)), E3";
             }
             elseif ($lic.AccountSkuID -eq "dmdrogerieentw:WACONEDRIVESTANDARD") 
             {
-                Write-Host "$(GetODUsage($od4bSC)), OneDrive" 
+                Write-Output "$(GetODUsage($od4bSC)), OneDrive" ;
             }
             elseif ($lic.AccountSkuId -eq "dmdrogerieentw:ENTERPRISEWITHSCAL")
             {
-                Write-Host "$(GetODUsage($od4bSC)), E4" 
+                Write-Output "$(GetODUsage($od4bSC)), E4" ;
             }    
         }
     }
 }
+
+Write-Output "Script finished";
