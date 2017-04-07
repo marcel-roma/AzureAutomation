@@ -28,6 +28,8 @@ Write-Output "Entering OneDrive-Loop...";
 
 foreach($usr in $(Get-MsolUser -All ))
 {
+    Write-Output "Processing user $usr ...";
+
     if ($usr.IsLicensed -eq $true)
     {
         $upn = $usr.UserPrincipalName.Replace(".","_");
@@ -36,17 +38,19 @@ foreach($usr in $(Get-MsolUser -All ))
 
         foreach($lic in $usr.licenses)
         {
+            $usage = GetODUsage($od4bSC);
+
             if ($lic.AccountSkuID -eq "dmdrogerieentw:ENTERPRISEPACK") 
             {
-                Write-Output "$(GetODUsage($od4bSC)), E3";
+                Write-Output "$usage, E3";
             }
             elseif ($lic.AccountSkuID -eq "dmdrogerieentw:WACONEDRIVESTANDARD") 
             {
-                Write-Output "$(GetODUsage($od4bSC)), OneDrive" ;
+                Write-Output "$usage, OneDrive" ;
             }
             elseif ($lic.AccountSkuId -eq "dmdrogerieentw:ENTERPRISEWITHSCAL")
             {
-                Write-Output "$(GetODUsage($od4bSC)), E4" ;
+                Write-Output "$usage, E4" ;
             }    
         }
     }
